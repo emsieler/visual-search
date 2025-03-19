@@ -6,14 +6,17 @@ import numpy as np
 import json
 import time
 import os
+import sys
 
 from PIL import Image
 from transformers import AutoModel
+
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from models_config import model_zoo
 
 class VectorDB:
     def __init__(self, model_names=None):
-        """Load models"""
+        """Initialize database and load models"""
         #load all models by default
         if model_names is None:
             model_names = list(model_zoo.keys())
@@ -40,13 +43,14 @@ class VectorDB:
 
         if model_names is None:
             print("Auto-detecting available models...")
-            model_names = list(model_zoo.keys())  # Load all models
+            model_names = list(model_zoo.keys())  # all available models
 
         for model_name in model_names:
             if model_name in model_zoo:
                 try:
-                    models_dict[model_name] = model_zoo[model_name]()  # Load model
-                    print(f"Loaded {model_name}")
+                    if model_name not in models_dict:
+                        models_dict[model_name] = model_zoo[model_name]()  # Load model
+                        print(f"Loaded {model_name}")
                 except Exception as e:
                     print(f"Skipping {model_name}: {e}")
             else:
