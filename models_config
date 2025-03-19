@@ -1,0 +1,49 @@
+#define available models
+
+from torchvision import models
+from transformers import AutoModel, CLIPProcessor, CLIPModel
+
+def load_clip():
+    """Load CLIP for vision and text embeddings."""
+    clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+    return clip_model, processor, 512
+
+
+def load_resnet():
+    """ResNet50 minus classifier for feature extraction."""
+    resnet = models.resnet50(pretrained=True)
+    resnet = torch.nn.Sequential(*list(resnet.children())[:-1])
+    resnet.eval()
+    return resnet
+
+model_zoo = {
+    "resnet": lambda: {
+        "model": load_resnet(),
+        "embedding_dim": 2048,
+        "input_size": (224, 224),
+        "mean": [0.485, 0.456, 0.406],
+        "std": [0.229, 0.224, 0.225]
+    },
+    "clip": lambda: {
+        "model": load_clip(),
+        "embedding_dim": 512,
+        "input_size": (224, 224),  # CLIP can also use 336x336
+        "mean": [0.481, 0.457, 0.408],
+        "std": [0.268, 0.261, 0.275]
+    },
+    "dino": lambda: {
+        "model": AutoModel.from_pretrained("facebook/dino-vitb8"),
+        "embedding_dim": 768,
+        "input_size": (224, 224),
+        "mean": [0.5, 0.5, 0.5],
+        "std": [0.5, 0.5, 0.5]
+    },
+    "vit": lambda: {
+        "model": AutoModel.from_pretrained("google/vit-base-patch16-224"),
+        "embedding_dim": 768,
+        "input_size": (224, 224),
+        "mean": [0.5, 0.5, 0.5],
+        "std": [0.5, 0.5, 0.5]
+    }
+}
