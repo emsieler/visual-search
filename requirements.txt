@@ -1,0 +1,7 @@
+faiss-gpu==1.7.2
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+numpy==2.1.2
+pillow==10.0.1
+transformers==4.34.0
