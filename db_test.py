@@ -1,32 +1,33 @@
 import pdb
-from vectordb import VectorDB  # Assuming your class is in vectordb.py
+from vectordb import VectorDB
+from models_config import model_zoo
 
 # Step 1: Initialize Database
-db = VectorDB(model_names=["resnet", "dino"])
-pdb.set_trace()  # Debug step (Check if models are loaded)
+db = VectorDB()
+#pdb.set_trace()
 
 # Step 2: Add Test Images
 db.add_image("test_images/test1.jpg")
 db.add_image("test_images/test2.png")
 db.add_image("test_images/test3.png")
 db.add_image("test_images/test4.png")
-pdb.set_trace()  # Debug step (Check metadata and FAISS count)
+#pdb.set_trace()  # Check metadata and FAISS count
 
 # Step 3: Check Metadata and FAISS Index
-print("\nMetadata:", db.metadata)
+#print("\nMetadata:", db.metadata)
 print("FAISS Index Count:", db.indexes["resnet"].ntotal)
 print("Lookup Table:", db.image_paths["resnet"])
-pdb.set_trace()
+#pdb.set_trace()
 
 # Step 4: Perform a Search
-results = db.search("test_images/cat1.jpg", model_name="resnet", k=2)
+results = db.search("test_images/test1.jpg", model_name="resnet", k=2)
 print("Search Results:", results)
-pdb.set_trace()
+#pdb.set_trace()
 
 # Step 5: Delete an Image
-db.delete_entry(1)  # Delete dog1.jpg
-print("\nMetadata after deletion:", db.metadata)
-pdb.set_trace()
+db.delete_entry(1)  # Delete test1.jpg
+#print("\nMetadata after deletion:", db.metadata)
+#pdb.set_trace()
 
 # Step 6: Rebuild FAISS
 db.rebuild_faiss_indexes()

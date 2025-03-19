@@ -30,6 +30,8 @@ def load_vit():
     return model  # No classifier, just embeddings
 
 model_zoo = {
+    # using lambdas for lazy loading (loads when needed)
+
     "resnet": lambda: {
         "model": load_resnet(),
         "embedding_dim": 2048,
@@ -37,13 +39,13 @@ model_zoo = {
         "mean": [0.485, 0.456, 0.406],
         "std": [0.229, 0.224, 0.225]
     },
-    #"clip": lambda: {
-    #    "model": load_clip(), #stores model and preprocessor
-    #    "embedding_dim": 512,
-    #    "input_size": (224, 224),  # CLIP supports 336x336 as well
-    #    "mean": [0.481, 0.457, 0.408],
-    #    "std": [0.268, 0.261, 0.275]
-    #},
+    "clip": lambda: {
+        "model": load_clip(), #stores model and preprocessor
+        "embedding_dim": 512,
+        "input_size": (224, 224),  # CLIP supports 336x336 as well
+        "mean": [0.481, 0.457, 0.408],
+        "std": [0.268, 0.261, 0.275]
+    },
     "dino": lambda: {
         "model": load_dino(),
         "embedding_dim": 768,
